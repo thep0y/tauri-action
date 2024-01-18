@@ -33,6 +33,9 @@ async function run(): Promise<void> {
     const args = stringArgv(core.getInput('args'));
     const bundleIdentifier = core.getInput('bundleIdentifier');
     const renameSlices = core.getMultilineInput('rename');
+
+    console.log('Got rename:', renameSlices);
+
     if (renameSlices.length && renameSlices.length !== 2) {
       throw new Error('rename should be two words');
     }
