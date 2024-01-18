@@ -34,7 +34,7 @@ async function run(): Promise<void> {
     const bundleIdentifier = core.getInput('bundleIdentifier');
     const renameString = core.getInput('rename');
     const renameSlices = renameString.replaceAll(' ', '').split(',');
-    if (renameSlices.length !== 2) {
+    if (renameSlices.length && renameSlices.length !== 2) {
       throw new Error('rename should be two words that splited by a comma');
     }
 
@@ -66,7 +66,9 @@ async function run(): Promise<void> {
     const buildOptions: BuildOptions = {
       tauriScript,
       args,
-      rename: { searchValue: renameSlices[0], replaceValue: renameSlices[1] },
+      rename: renameSlices.length
+        ? { searchValue: renameSlices[0], replaceValue: renameSlices[1] }
+        : null,
     };
     const initOptions: InitOptions = {
       distPath,
