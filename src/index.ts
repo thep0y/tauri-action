@@ -32,10 +32,9 @@ async function run(): Promise<void> {
     const tauriScript = core.getInput('tauriScript');
     const args = stringArgv(core.getInput('args'));
     const bundleIdentifier = core.getInput('bundleIdentifier');
-    const renameString = core.getInput('rename');
-    const renameSlices = renameString.replaceAll(' ', '').split(',');
+    const renameSlices = core.getMultilineInput('rename');
     if (renameSlices.length && renameSlices.length !== 2) {
-      throw new Error('rename should be two words that splited by a comma');
+      throw new Error('rename should be two words');
     }
 
     let tagName = core.getInput('tagName').replace('refs/tags/', '');

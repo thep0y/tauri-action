@@ -224,5 +224,14 @@ export async function buildProject(
     return filteredArtifacts;
   }
 
-  return await renameFiles(filteredArtifacts, buildOpts.rename);
+  const renamedArtifacts = await renameFiles(
+    filteredArtifacts,
+    buildOpts.rename,
+  );
+
+  console.log(
+    `Renamed artifacts to:\n${renamedArtifacts.map((a) => a.path).join('\n')}`,
+  );
+
+  return renamedArtifacts;
 }
