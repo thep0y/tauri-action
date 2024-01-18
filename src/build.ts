@@ -9,6 +9,7 @@ import {
   getTargetInfo,
   getTauriDir,
   getWorkspaceDir,
+  renameFiles,
 } from './utils';
 
 import type { Artifact, BuildOptions, InitOptions } from './types';
@@ -217,5 +218,11 @@ export async function buildProject(
   console.log(
     `Looking for artifacts in:\n${artifacts.map((a) => a.path).join('\n')}`,
   );
-  return artifacts.filter((p) => existsSync(p.path));
+  const filteredArtifacts = artifacts.filter((p) => existsSync(p.path));
+
+  if (!buildOpts.rename) {
+    return filteredArtifacts;
+  }
+
+  return await renameFiles(filteredArtifacts, buildOpts.rename);
 }

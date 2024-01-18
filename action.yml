@@ -47,6 +47,8 @@ inputs:
     default: false
   tauriScript:
     description: 'the script to run to build the Tauri app'
+  rename:
+    description: 'rename all the bundles'
   args:
     description: 'arguments for the tauri command'
   bundleIdentifier:

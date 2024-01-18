@@ -32,6 +32,11 @@ async function run(): Promise<void> {
     const tauriScript = core.getInput('tauriScript');
     const args = stringArgv(core.getInput('args'));
     const bundleIdentifier = core.getInput('bundleIdentifier');
+    const renameString = core.getInput('rename');
+    const renameSlices = renameString.replaceAll(' ', '').split(',');
+    if (renameSlices.length !== 2) {
+      throw new Error('rename should be two words that splited by a comma');
+    }
 
     let tagName = core.getInput('tagName').replace('refs/tags/', '');
     let releaseId = Number(core.getInput('releaseId'));
@@ -61,6 +66,7 @@ async function run(): Promise<void> {
     const buildOptions: BuildOptions = {
       tauriScript,
       args,
+      rename: { searchValue: renameSlices[0], replaceValue: renameSlices[1] },
     };
     const initOptions: InitOptions = {
       distPath,
