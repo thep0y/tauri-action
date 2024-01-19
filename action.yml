@@ -48,7 +48,7 @@ inputs:
   tauriScript:
     description: 'the script to run to build the Tauri app'
   rename:
-    description: 'rename all the bundles'
+    description: 'rename all the bundles, the value type is JSON string: ${{ fromJSON(''{"searchValue": "<...>", "replaceValue", "<...>"''} }}'
   args:
     description: 'arguments for the tauri command'
   bundleIdentifier:

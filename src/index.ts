@@ -11,7 +11,7 @@ import { uploadVersionJSON } from './upload-version-json';
 import { buildProject } from './build';
 import { execCommand, getInfo, getTargetInfo } from './utils';
 
-import type { Artifact, BuildOptions, InitOptions } from './types';
+import type { Artifact, BuildOptions, InitOptions, Rename } from './types';
 
 async function run(): Promise<void> {
   try {
@@ -32,13 +32,12 @@ async function run(): Promise<void> {
     const tauriScript = core.getInput('tauriScript');
     const args = stringArgv(core.getInput('args'));
     const bundleIdentifier = core.getInput('bundleIdentifier');
-    const renameSlices = core.getMultilineInput('rename');
+    const renameString = core.getInput('rename');
+    const rename: Rename | null = renameString
+      ? JSON.parse(renameString)
+      : null;
 
-    console.log('Got rename:', renameSlices);
-
-    if (renameSlices.length && renameSlices.length !== 2) {
-      throw new Error('rename should be two words');
-    }
+    console.log('Got rename:', JSON.stringify(rename));
 
     let tagName = core.getInput('tagName').replace('refs/tags/', '');
     let releaseId = Number(core.getInput('releaseId'));
@@ -68,9 +67,7 @@ async function run(): Promise<void> {
     const buildOptions: BuildOptions = {
       tauriScript,
       args,
-      rename: renameSlices.length
-        ? { searchValue: renameSlices[0], replaceValue: renameSlices[1] }
-        : null,
+      rename,
     };
     const initOptions: InitOptions = {
       distPath,
