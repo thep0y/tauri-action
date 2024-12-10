@@ -1297,15 +1297,16 @@ snapshots:
       picocolors: 1.1.1
       sisteransi: 1.0.5
 
-  '@covector/apply@0.10.0':
+  '@covector/apply@0.10.0(mocha@10.4.0)':
     dependencies:
       '@covector/files': 0.8.0
       effection: 2.0.8(mocha@10.4.0)
       semver: 7.6.3
     transitivePeerDependencies:
       - encoding
+      - mocha
 
-  '@covector/assemble@0.12.0(mocha@10.4.0)':
+  '@covector/assemble@0.12.0':
     dependencies:
       '@covector/command': 0.8.0
       '@covector/files': 0.8.0
@@ -1318,7 +1319,6 @@ snapshots:
       unified: 9.2.2
     transitivePeerDependencies:
       - encoding
-      - mocha
       - supports-color
 
   '@covector/changelog@0.12.0':
@@ -1747,8 +1747,8 @@ snapshots:
   covector@0.12.3(mocha@10.4.0):
     dependencies:
       '@clack/prompts': 0.7.0
-      '@covector/apply': 0.10.0
-      '@covector/assemble': 0.12.0(mocha@10.4.0)
+      '@covector/apply': 0.10.0(mocha@10.4.0)
+      '@covector/assemble': 0.12.0
       '@covector/changelog': 0.12.0
       '@covector/command': 0.8.0
       '@covector/files': 0.8.0

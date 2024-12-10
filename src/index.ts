@@ -5,7 +5,7 @@ import * as core from '@actions/core';
 import { context } from '@actions/github';
 import stringArgv from 'string-argv';
 
-import { createRelease } from './create-release';
+import { getOrCreateRelease } from './create-release';
 import { uploadAssets as uploadReleaseAssets } from './upload-release-assets';
 import { uploadVersionJSON } from './upload-version-json';
 import { buildProject } from './build';
@@ -48,16 +48,6 @@ async function run(): Promise<void> {
     // Not using getBooleanInput so we can differentiate between true,false,unset later.
     const updaterJsonPreferNsis =
       core.getInput('updaterJsonPreferNsis')?.toLowerCase() === 'true';
-
-    // If releaseId is set we'll use this to upload the assets to.
-    // If tagName is set we also require releaseName to create a new release.
-    // If neither releaseId nor tagName are set we won't try to upload anything at the end.
-    if (!releaseId) {
-      if (Boolean(tagName) && !releaseName)
-        throw new Error(
-          '`releaseName` is required if `tagName` is set when creating a release.',
-        );
-    }
 
     const buildOptions: BuildOptions = {
       tauriScript,
@@ -111,7 +101,7 @@ async function run(): Promise<void> {
     const artifacts = releaseArtifacts.concat(debugArtifacts);
 
     if (artifacts.length === 0) {
-      if (releaseId || tagName || releaseName) {
+      if (releaseId || tagName) {
         throw new Error('No artifacts were found.');
       } else {
         console.log(
@@ -161,6 +151,9 @@ async function run(): Promise<void> {
       }
     }
 
+    // If releaseId is set we'll use this to upload the assets to.
+    // If tagName is set we will try to upload assets to the release associated with the given tagName.
+    // If there's no release for that tag, we require releaseName to create a new one.
     if (tagName && !releaseId) {
       const templates = [
         {
@@ -176,11 +169,11 @@ async function run(): Promise<void> {
         body = body.replace(regex, template.value);
       });
 
-      const releaseData = await createRelease(
+      const releaseData = await getOrCreateRelease(
         owner,
         repo,
         tagName,
-        releaseName,
+        releaseName || undefined,
         body,
         commitish || undefined,
         draft,

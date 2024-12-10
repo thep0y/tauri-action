@@ -7,7 +7,7 @@ inputs:
   releaseId:
     description: 'The id of the release to upload artifacts as release assets'
   tagName:
-    description: 'The tag name of the release to create'
+    description: 'The tag name of the release to create or upload to'
   releaseName:
     description: 'The name of the release to create'
   releaseBody:
